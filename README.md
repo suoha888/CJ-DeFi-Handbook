@@ -1,7 +1,9 @@
-﻿# 📚 DeFi-Arb-Codex | 顶级做市与套利实战全书
+﻿# 📚 CJ-DeFi-Handbook | 西角 DeFi 做市与套利实战手册
 
 > **基于推特顶级做市与套利高手 CJ（[@gch_enbsbxbs](https://x.com/gch_enbsbxbs)）历年 502 篇核心推文深度解构而成**  
 > 纯开源、去中心化、硬核无废话的链上套利与「主观 LP 做市交易体系」大典。
+
+> 📖 **全球公开在线阅读站**：[https://suoha888.github.io/CJ-DeFi-Handbook/](https://suoha888.github.io/CJ-DeFi-Handbook/)
 
 ---
 
@@ -18,7 +20,7 @@
 ## 📂 目录结构
 
 ```tree
-DeFi_Arb_Codex/
+CJ-DeFi-Handbook/
 ├── index.html              # 🎨 7卷28课题全量融合实战电子书（双击即开，纯自包含离线阅读）
 ├── README.md               # 📖 开源项目白皮书与全景架构说明
 ├── LICENSE                 # ⚖️ MIT 开源许可协议
@@ -81,13 +83,13 @@ DeFi_Arb_Codex/
 ## 🚀 极速上手
 
 ### 1. 本地沉浸式阅读
-直接双击打开 `DeFi_Arb_Codex/index.html`，无需联网，无需依赖 Node.js 或额外环境，即刻开启纯净的书本式学习之旅。
+直接双击打开 `CJ-DeFi-Handbook/index.html`，无需联网，无需依赖 Node.js 或额外环境，即刻开启纯净的书本式学习之旅。
 
 ### 2. 数据分析与量化回测 (Python 示例)
 ```python
 import json
 
-with open('DeFi_Arb_Codex/data/cj_arbitrage_lp_tweets.json', 'r', encoding='utf-8') as f:
+with open('CJ-DeFi-Handbook/data/cj_arbitrage_lp_tweets.json', 'r', encoding='utf-8') as f:
     tweets = json.load(f)
 
 print(f"收录推文总数: {len(tweets)}")

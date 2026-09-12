@@ -1,4 +1,4 @@
-﻿# 📚 CJ-DeFi-Handbook | 西角 DeFi 做市与套利实战手册
+﻿# 📚 CJ-DeFi-Handbook | CJ DeFi 做市与套利实战手册
 
 > **基于推特顶级做市与套利高手 CJ（[@gch_enbsbxbs](https://x.com/gch_enbsbxbs)）历年 502 篇核心推文深度解构而成**  
 > 纯开源、去中心化、硬核无废话的链上套利与「主观 LP 做市交易体系」大典。

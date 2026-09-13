@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
+        <link rel="preconnect" href="https://api.b.ai" crossorigin>
+    <link rel="dns-prefetch" href="https://api.b.ai">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -6529,7 +6531,7 @@ renderArchiveList();
 
 <script>
 
-// ===== CJ AI 做市助手客户端逻辑 =====
+// ===== CJ AI 做市助手客户端逻辑（极致速度与高并发优化版） =====
 const CJ_AI_CONFIG = {
     apiUrl: 'https://api.b.ai/v1/chat/completions',
     model: 'qwen3.8-flash',
@@ -6540,19 +6542,40 @@ const CJ_AI_CONFIG = {
         'sk-1pkd0awf8ykyoqj2aagcz6aaivbwj8fn',
         'sk-19yrb9ycb9awa2ntq308urofn6g54dk0'
     ],
-    systemPrompt: `你是由研究员梭哈.AI @SUOHA_AI 基于推特顶级做市与量化套利高手 CJ（@gch_enbsbxbs）502篇实战推文与交易方法论深度解构而成的「CJ DeFi 做市与套利 AI 助手」。
-你的回答风格：极其硬核、真实交易员口吻、数学严密、直切痛点，绝不说教，坚决杜绝一切AI套话。
-【CJ 做市与套利核心战法心法】：
-1. 进场唯一数学精算：只有当预期摩擦手续费收益（Fee）远大于无常损失（IL）时才做池子。短线高波 LP 必须 APR > 3000% 才能打，< 1000% 是绝对禁区。
-2. 锯齿状双层马丁嵌套挂单：单边做市通过非线性资金加权挂 15 级离散网格（越往下跌挂单量成几何级数放大），大幅拉低持仓均价。
-3. 几何亏损减半法则：单边 10% 区间跌穿仅亏 5%，20% 区间跌穿仅亏 10%，用做市的数学容错率替代主动波段的脆弱择时。
-4. 容错兜底与出场铁律：价格单边脱离预设区间，坚决强制撤池止损，绝不抗单！坚决拉黑自动再平衡（Rebalancing，那是割肉机器）。
-5. 套利硬逻辑：现货插针套利（如 Hyperliquid）、跨市场/跨期资金费率套利（Perp Funding）、借贷利差循环与 Pendle PT 贴现套利。
-6. 工程底层：防 MEV 夹子机器人、RPC 节点低延迟优化、多池并行现金流覆盖机制。
-回答时，直接给出具体的数值比例、分层区间挂单建议与风控生命线。结尾可自然带一句交易员忠告或非投资建议提示。`
+    temperature: 0.35,
+    maxTokens: 700,
+    systemPrompt: `你是由研究员梭哈.AI @SUOHA_AI 基于推特顶级做市高手 CJ（@gch_enbsbxbs）502篇实战推文训练而成的「CJ DeFi 做市与套利 AI 助手」。
+风格：极其硬核、真实交易员口吻、数学严密、直切痛点，绝不说教，拒绝一切废话。
+【CJ 做市核心战法】：
+1. 进场精算：Fee 必须远大于 IL，短线高波 LP 必须 APR > 3000% 才打，< 1000% 是禁区。
+2. 锯齿状双层马丁嵌套挂单：单边做市挂 15 级离散网格，越跌挂单量成几何放大，大幅拉低持仓均价。
+3. 几何亏损减半法则：单边 10% 区间跌穿仅亏 5%，20% 区间跌穿仅亏 10%，用做市数学容错率替代主动择时。
+4. 容错兜底与出场铁律：价格单边脱离预设区间，坚决强制撤池止损，绝不抗单！坚决拉黑自动再平衡。
+5. 套利硬逻辑：现货插针套利（如 Hyperliquid）、跨期/跨所资金费率套利（Perp Funding）、借贷利差与 Pendle PT 贴现套利。
+6. 工程底层：防 MEV 夹子、RPC 节点低延迟、多池现金流对冲。
+直接输出具体战术参数与风控生命线，字数精炼在 300-500 字内。`
 };
 
-let cjAiKeyIndex = Math.floor(Math.random() * CJ_AI_CONFIG.keys.length);
+// 智能 Key 健康管理与轮询池（支持动态扩充与自动冷却）
+const keyCooldownMap = new Map();
+
+function getHealthyKey() {
+    const now = Date.now();
+    const availableKeys = CJ_AI_CONFIG.keys.filter(k => {
+        const cooldownUntil = keyCooldownMap.get(k) || 0;
+        return now >= cooldownUntil;
+    });
+    if (availableKeys.length === 0) {
+        // 全部冷却中时，取最早恢复的 key
+        return CJ_AI_CONFIG.keys[Math.floor(Math.random() * CJ_AI_CONFIG.keys.length)];
+    }
+    return availableKeys[Math.floor(Math.random() * availableKeys.length)];
+}
+
+function markKeyCooldown(key, seconds = 20) {
+    keyCooldownMap.set(key, Date.now() + seconds * 1000);
+}
+
 let cjAiHistory = [
     { role: 'system', content: CJ_AI_CONFIG.systemPrompt }
 ];
@@ -6560,12 +6583,13 @@ let isCjAiGenerating = false;
 
 function toggleCjAiModal() {
     const modal = document.getElementById('cjAiModal');
+    if (!modal) return;
     modal.classList.toggle('active');
     if (modal.classList.contains('active')) {
         setTimeout(() => {
             const input = document.getElementById('cjAiInput');
             if (input) input.focus();
-        }, 150);
+        }, 100);
     }
 }
 
@@ -6574,10 +6598,11 @@ function clearCjAiChat() {
         { role: 'system', content: CJ_AI_CONFIG.systemPrompt }
     ];
     const body = document.getElementById('cjAiBody');
+    if (!body) return;
     body.innerHTML = `
         <div class="cj-msg-row assistant">
             <div class="cj-msg-bubble">
-                对话已重置。我是 CJ 老师的 AI 策略分身，有什么做市或链上套利问题，随时直接问我。
+                对话已重置。我是 CJ 老师的 AI 策略分身，关于 15 级阶梯离散网格、单边挂单与期现套利，随时直接问我。
             </div>
         </div>
         <div class="cj-ai-quick-pills" id="cjQuickPills">
@@ -6600,8 +6625,10 @@ function clearCjAiChat() {
 
 function sendQuickPrompt(promptText) {
     const input = document.getElementById('cjAiInput');
-    input.value = promptText;
-    sendCjAiMessage();
+    if (input) {
+        input.value = promptText;
+        sendCjAiMessage();
+    }
 }
 
 function onCjAiKeyDown(e) {
@@ -6614,13 +6641,9 @@ function onCjAiKeyDown(e) {
 function renderSimpleMarkdown(raw) {
     if (!raw) return '';
     let txt = raw.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    // Code blocks with safe RegExp
     txt = txt.replace(new RegExp('```([a-zA-Z0-9_-]*)[\r\n]([\s\S]*?)```', 'g'), '<pre><code>$2</code></pre>');
-    // Inline code
     txt = txt.replace(new RegExp('`([^`]+)`', 'g'), '<code>$1</code>');
-    // Bold
     txt = txt.replace(new RegExp('\\*\\*([^\\*]+)\\*\\*', 'g'), '<strong>$1</strong>');
-    // Lines
     txt = txt.replace(new RegExp('\r?\n', 'g'), '<br>');
     return txt;
 }
@@ -6635,50 +6658,45 @@ function scrollCjAiToBottom() {
 async function sendCjAiMessage() {
     if (isCjAiGenerating) return;
     const input = document.getElementById('cjAiInput');
-    const userText = input.value.trim();
+    const userText = input ? input.value.trim() : '';
     if (!userText) return;
 
-    // 隐藏快捷问题卡片
     const pills = document.getElementById('cjQuickPills');
     if (pills) pills.style.display = 'none';
 
-    // 渲染用户气泡
     const body = document.getElementById('cjAiBody');
     const userRow = document.createElement('div');
     userRow.className = 'cj-msg-row user';
     userRow.innerHTML = `<div class="cj-msg-bubble">${userText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
     body.appendChild(userRow);
 
-    input.value = '';
-    input.style.height = '38px';
+    if (input) {
+        input.value = '';
+        input.style.height = '38px';
+    }
     scrollCjAiToBottom();
 
-    // 添加到历史
     cjAiHistory.push({ role: 'user', content: userText });
 
-    // 准备 AI 气泡
     const aiRow = document.createElement('div');
     aiRow.className = 'cj-msg-row assistant';
     const aiBubble = document.createElement('div');
     aiBubble.className = 'cj-msg-bubble';
-    aiBubble.innerHTML = '<span style="color: #999;">正在调取 CJ 502 篇做市数据库计算...</span>';
+    aiBubble.innerHTML = '<span style="color: #92400E; font-size:12px;">⚡ 正在调取 CJ 502 篇知识库推演...</span>';
     aiRow.appendChild(aiBubble);
     body.appendChild(aiRow);
     scrollCjAiToBottom();
 
     isCjAiGenerating = true;
     const sendBtn = document.getElementById('cjAiSendBtn');
-    sendBtn.disabled = true;
+    if (sendBtn) sendBtn.disabled = true;
 
     let fullAiResponse = '';
     let retryCount = 0;
-    const maxRetries = CJ_AI_CONFIG.keys.length;
+    const maxRetries = Math.min(CJ_AI_CONFIG.keys.length, 4);
 
     while (retryCount < maxRetries) {
-        // 轮询 Key
-        const currentKey = CJ_AI_CONFIG.keys[cjAiKeyIndex];
-        cjAiKeyIndex = (cjAiKeyIndex + 1) % CJ_AI_CONFIG.keys.length;
-
+        const currentKey = getHealthyKey();
         try {
             const resp = await fetch(CJ_AI_CONFIG.apiUrl, {
                 method: 'POST',
@@ -6690,14 +6708,13 @@ async function sendCjAiMessage() {
                     model: CJ_AI_CONFIG.model,
                     messages: cjAiHistory,
                     stream: true,
-                    temperature: 0.6,
-                    max_tokens: 1200
+                    temperature: CJ_AI_CONFIG.temperature,
+                    max_tokens: CJ_AI_CONFIG.maxTokens
                 })
             });
 
             if (!resp.ok) {
-                const errText = await resp.text();
-                console.warn(`Key #${cjAiKeyIndex} failed: ${resp.status}`, errText);
+                markKeyCooldown(currentKey, 30);
                 retryCount++;
                 continue;
             }
@@ -6705,7 +6722,7 @@ async function sendCjAiMessage() {
             const reader = resp.body.getReader();
             const decoder = new TextDecoder('utf-8');
             let buffer = '';
-            aiBubble.innerHTML = '';
+            let renderScheduled = false;
 
             while (true) {
                 const { done, value } = await reader.read();
@@ -6722,32 +6739,38 @@ async function sendCjAiMessage() {
                             const delta = chunk.choices[0]?.delta?.content || '';
                             if (delta) {
                                 fullAiResponse += delta;
-                                aiBubble.innerHTML = renderSimpleMarkdown(fullAiResponse);
-                                scrollCjAiToBottom();
+                                if (!renderScheduled) {
+                                    renderScheduled = true;
+                                    requestAnimationFrame(() => {
+                                        aiBubble.innerHTML = renderSimpleMarkdown(fullAiResponse);
+                                        scrollCjAiToBottom();
+                                        renderScheduled = false;
+                                    });
+                                }
                             }
                         } catch (e) {}
                     }
                 }
             }
 
-            // 完成
+            // 最终刷新一次确保完整
+            aiBubble.innerHTML = renderSimpleMarkdown(fullAiResponse);
             cjAiHistory.push({ role: 'assistant', content: fullAiResponse });
             break;
 
         } catch (netErr) {
-            console.error('Network or fetch error:', netErr);
+            markKeyCooldown(currentKey, 30);
             retryCount++;
             if (retryCount >= maxRetries) {
-                aiBubble.innerHTML = '<span style="color: #B91C1C;">网络请求稍有波动，请点击重试或直接下载完整推文数据向本地 AI 提问。</span>';
+                aiBubble.innerHTML = '<span style="color: #B91C1C;">网络稍微繁忙，请重试一次或直接下载完整数据用本地 AI 问答。</span>';
             }
         }
     }
 
     isCjAiGenerating = false;
-    sendBtn.disabled = false;
+    if (sendBtn) sendBtn.disabled = false;
     scrollCjAiToBottom();
 }
-
 </script>
 </body>
 </html>

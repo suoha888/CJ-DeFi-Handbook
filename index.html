@@ -6535,6 +6535,7 @@ renderArchiveList();
 const CJ_AI_CONFIG = {
     apiUrl: 'https://api.b.ai/v1/chat/completions',
     model: 'qwen3.8-flash',
+    enable_thinking: false,
     keys: [
         'sk-1piatqwcztpg28a4hxjj1rvpwa62kzrd',
         'sk-18sf6ylvkm9zlvl61q4hmikjwg98lwkh',
@@ -6543,7 +6544,7 @@ const CJ_AI_CONFIG = {
         'sk-19yrb9ycb9awa2ntq308urofn6g54dk0'
     ],
     temperature: 0.35,
-    maxTokens: 700,
+    maxTokens: 600,
     systemPrompt: `你是由研究员梭哈.AI @SUOHA_AI 基于推特顶级做市高手 CJ（@gch_enbsbxbs）502篇实战推文训练而成的「CJ DeFi 做市与套利 AI 助手」。
 风格：极其硬核、真实交易员口吻、数学严密、直切痛点，绝不说教，拒绝一切废话。
 【CJ 做市核心战法】：
@@ -6556,24 +6557,12 @@ const CJ_AI_CONFIG = {
 直接输出具体战术参数与风控生命线，字数精炼在 300-500 字内。`
 };
 
-// 智能 Key 健康管理与轮询池（支持动态扩充与自动冷却）
-const keyCooldownMap = new Map();
+let cjAiKeyIndex = Math.floor(Math.random() * CJ_AI_CONFIG.keys.length);
 
-function getHealthyKey() {
-    const now = Date.now();
-    const availableKeys = CJ_AI_CONFIG.keys.filter(k => {
-        const cooldownUntil = keyCooldownMap.get(k) || 0;
-        return now >= cooldownUntil;
-    });
-    if (availableKeys.length === 0) {
-        // 全部冷却中时，取最早恢复的 key
-        return CJ_AI_CONFIG.keys[Math.floor(Math.random() * CJ_AI_CONFIG.keys.length)];
-    }
-    return availableKeys[Math.floor(Math.random() * availableKeys.length)];
-}
-
-function markKeyCooldown(key, seconds = 20) {
-    keyCooldownMap.set(key, Date.now() + seconds * 1000);
+function getNextKey() {
+    const k = CJ_AI_CONFIG.keys[cjAiKeyIndex];
+    cjAiKeyIndex = (cjAiKeyIndex + 1) % CJ_AI_CONFIG.keys.length;
+    return k;
 }
 
 let cjAiHistory = [
@@ -6682,7 +6671,7 @@ async function sendCjAiMessage() {
     aiRow.className = 'cj-msg-row assistant';
     const aiBubble = document.createElement('div');
     aiBubble.className = 'cj-msg-bubble';
-    aiBubble.innerHTML = '<span style="color: #92400E; font-size:12px;">⚡ 正在调取 CJ 502 篇知识库推演...</span>';
+    aiBubble.innerHTML = '<span style="color: #92400E; font-size:12px;">⚡ 正在连接 CJ 做市策略库...</span>';
     aiRow.appendChild(aiBubble);
     body.appendChild(aiRow);
     scrollCjAiToBottom();
@@ -6692,12 +6681,13 @@ async function sendCjAiMessage() {
     if (sendBtn) sendBtn.disabled = true;
 
     let fullAiResponse = '';
-    let retryCount = 0;
-    const maxRetries = Math.min(CJ_AI_CONFIG.keys.length, 4);
+    let success = false;
+    const totalKeys = CJ_AI_CONFIG.keys.length;
 
-    while (retryCount < maxRetries) {
-        const currentKey = getHealthyKey();
+    for (let attempt = 0; attempt < totalKeys; attempt++) {
+        const currentKey = getNextKey();
         try {
+            console.log(`Sending query with Key #${cjAiKeyIndex} (${currentKey.slice(0, 8)})...`);
             const resp = await fetch(CJ_AI_CONFIG.apiUrl, {
                 method: 'POST',
                 headers: {
@@ -6707,6 +6697,7 @@ async function sendCjAiMessage() {
                 body: JSON.stringify({
                     model: CJ_AI_CONFIG.model,
                     messages: cjAiHistory,
+                    enable_thinking: false,
                     stream: true,
                     temperature: CJ_AI_CONFIG.temperature,
                     max_tokens: CJ_AI_CONFIG.maxTokens
@@ -6714,15 +6705,16 @@ async function sendCjAiMessage() {
             });
 
             if (!resp.ok) {
-                markKeyCooldown(currentKey, 30);
-                retryCount++;
+                const errText = await resp.text();
+                console.warn(`Attempt ${attempt+1} failed with status ${resp.status}:`, errText);
+                aiBubble.innerHTML = `<span style="color: #92400E; font-size:12px;">⚡ 节点响应切换中 (${attempt+1}/${totalKeys})...</span>`;
                 continue;
             }
 
             const reader = resp.body.getReader();
             const decoder = new TextDecoder('utf-8');
             let buffer = '';
-            let renderScheduled = false;
+            let isFirstChunk = true;
 
             while (true) {
                 const { done, value } = await reader.read();
@@ -6736,35 +6728,36 @@ async function sendCjAiMessage() {
                     if (trimmed.startsWith('data: ') && trimmed !== 'data: [DONE]') {
                         try {
                             const chunk = JSON.parse(trimmed.slice(6));
-                            const delta = chunk.choices[0]?.delta?.content || '';
+                            const delta = chunk.choices?.[0]?.delta?.content || chunk.choices?.[0]?.delta?.reasoning_content || '';
                             if (delta) {
-                                fullAiResponse += delta;
-                                if (!renderScheduled) {
-                                    renderScheduled = true;
-                                    requestAnimationFrame(() => {
-                                        aiBubble.innerHTML = renderSimpleMarkdown(fullAiResponse);
-                                        scrollCjAiToBottom();
-                                        renderScheduled = false;
-                                    });
+                                if (isFirstChunk) {
+                                    aiBubble.innerHTML = '';
+                                    isFirstChunk = false;
                                 }
+                                fullAiResponse += delta;
+                                aiBubble.innerHTML = renderSimpleMarkdown(fullAiResponse);
+                                scrollCjAiToBottom();
                             }
                         } catch (e) {}
                     }
                 }
             }
 
-            // 最终刷新一次确保完整
-            aiBubble.innerHTML = renderSimpleMarkdown(fullAiResponse);
-            cjAiHistory.push({ role: 'assistant', content: fullAiResponse });
-            break;
-
-        } catch (netErr) {
-            markKeyCooldown(currentKey, 30);
-            retryCount++;
-            if (retryCount >= maxRetries) {
-                aiBubble.innerHTML = '<span style="color: #B91C1C;">网络稍微繁忙，请重试一次或直接下载完整数据用本地 AI 问答。</span>';
+            if (fullAiResponse.trim()) {
+                aiBubble.innerHTML = renderSimpleMarkdown(fullAiResponse);
+                cjAiHistory.push({ role: 'assistant', content: fullAiResponse });
+                success = true;
+                break;
             }
+
+        } catch (fetchErr) {
+            console.error(`Attempt ${attempt+1} network error:`, fetchErr);
+            aiBubble.innerHTML = `<span style="color: #92400E; font-size:12px;">⚡ 网络调度重试中 (${attempt+1}/${totalKeys})...</span>`;
         }
+    }
+
+    if (!success) {
+        aiBubble.innerHTML = '<span style="color: #B91C1C;">⚠️ 当前中转通道并发过高或网络波动，请点击重试，或直接在页面底部下载完整推文数据向本地 AI 提问。</span>';
     }
 
     isCjAiGenerating = false;

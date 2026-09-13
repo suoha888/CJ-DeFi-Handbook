@@ -6614,15 +6614,14 @@ function onCjAiKeyDown(e) {
 function renderSimpleMarkdown(raw) {
     if (!raw) return '';
     let txt = raw.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    // Code blocks
-    txt = txt.replace(/```([a-z]*)
-([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+    // Code blocks with safe RegExp
+    txt = txt.replace(new RegExp('```([a-zA-Z0-9_-]*)[\r\n]([\s\S]*?)```', 'g'), '<pre><code>$2</code></pre>');
     // Inline code
-    txt = txt.replace(/`([^`]+)`/g, '<code>$1</code>');
+    txt = txt.replace(new RegExp('`([^`]+)`', 'g'), '<code>$1</code>');
     // Bold
-    txt = txt.replace(/\*\*([^\*]+)\*\*/g, '<strong>$1</strong>');
+    txt = txt.replace(new RegExp('\\*\\*([^\\*]+)\\*\\*', 'g'), '<strong>$1</strong>');
     // Lines
-    txt = txt.replace(/\n/g, '<br>');
+    txt = txt.replace(new RegExp('\r?\n', 'g'), '<br>');
     return txt;
 }
 

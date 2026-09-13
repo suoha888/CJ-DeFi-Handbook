@@ -588,6 +588,49 @@ body { font-family: var(--font-sans); color: var(--text-main); background-color:
     border-bottom-left-radius: 2px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.02);
 }
+
+/* 课题高亮闪烁与 AI 内部卡片跳转链接 */
+.topic-card.highlight-pulse {
+    border-color: #B45309 !important;
+    box-shadow: 0 0 0 4px rgba(180, 83, 9, 0.28), 0 12px 32px rgba(180, 83, 9, 0.2) !important;
+    transform: translateY(-2px);
+    transition: all 0.3s ease-in-out;
+}
+.cj-ai-pill-item.highlight-pill {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    border-color: #F59E0B;
+    color: #92400E;
+    font-weight: 700;
+}
+.cj-ai-topic-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #FEF3C7;
+    color: #92400E;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(180, 83, 9, 0.28);
+    text-decoration: none;
+    margin: 2px 2px;
+    transition: all 0.15s;
+    cursor: pointer;
+    font-size: 13px;
+}
+.cj-ai-topic-link:hover {
+    background: #FDE68A;
+    border-color: #B45309;
+    color: #78350F;
+    box-shadow: 0 2px 6px rgba(180, 83, 9, 0.15);
+    transform: translateY(-1px);
+}
+.cj-ai-ext-link {
+    color: #B45309;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
 .cj-msg-bubble pre {
     background: #25201A;
     color: #F8F4EC;
@@ -951,6 +994,10 @@ body { font-family: var(--font-sans); color: var(--text-main); background-color:
         </div>
 
         <div class="sidebar-footer">
+                        <button class="btn-sidebar-action btn-ai-guide" onclick="startCjAiGuide()" style="background: linear-gradient(135deg, #B45309 0%, #D97706 100%); color: #FFFFFF; font-weight: 700; border: none; box-shadow: 0 2px 8px rgba(180, 83, 9, 0.2);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span>🧭 AI 导师系统领读全书</span>
+            </button>
             <a href="#archive-section" class="btn-sidebar-action btn-download-full">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 <span>检索全部 502 条推文</span>
@@ -990,6 +1037,19 @@ body { font-family: var(--font-sans); color: var(--text-main); background-color:
             <p class="hero-desc">
                 在绝大多数人眼里，加密货币是一场靠单点择时追涨杀跌的轮盘赌：山寨币死拿面临归零风险，主动波段频繁被洗盘插针割肉。然而在以 CJ 老师为代表的专业做市商与套利者眼中，市场永远只是一道关于<strong>“摩擦成本、利率差与流动性溢价”</strong>的数学题。本手册由 <strong>梭哈.AI（@SUOHA_AI）</strong> 整理完成，剔除碎片化信息，凝练为由浅入深的 7 大篇章与 28 个硬核课题，并内嵌近百篇原推全文与 123 张实盘配图，打造全网首个完全站内自包含、无需跳转外网的沉浸式实战知识库。
             </p>
+
+                        <div class="hero-cta-row" style="display: flex; gap: 10px; margin: 18px 0 26px 0; flex-wrap: wrap;">
+                <button onclick="startCjAiGuide()" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #B45309 0%, #D97706 100%); color: #FFFFFF; font-weight: 800; font-size: 13.5px; padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(180, 83, 9, 0.25); transition: all 0.2s;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    <span>🧭 开启 AI 导师系统领读全书</span>
+                </button>
+                <a href="#t-01" style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; color: var(--text-main); font-weight: 700; font-size: 13px; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border-main); text-decoration: none; transition: all 0.2s;">
+                    <span>📖 顺读 28 核心课题</span>
+                </a>
+                <a href="#archive-section" style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; color: var(--text-main); font-weight: 700; font-size: 13px; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border-main); text-decoration: none; transition: all 0.2s;">
+                    <span>🔍 检索 502 条推文原文</span>
+                </a>
+            </div>
 
             <div class="method-flow-wrap">
                 <div class="flow-title">
@@ -6496,14 +6556,16 @@ renderArchiveList();
     <div class="cj-ai-body" id="cjAiBody">
         <div class="cj-msg-row assistant">
             <div class="cj-msg-bubble">
-                老铁你好！我是本手册（《CJ DeFi 做市与套利实战手册》）的原生内置 AI 助手，严格基于 CJ 老师（@gch_enbsbxbs）502 篇实盘推文与策略库构建。<br><br>无论是查阅本站推文数据下载，还是交流 15 级马丁挂单、集中流动性与期现套利公式，都可以随时问我！
+                老铁你好！我是《CJ DeFi 做市与套利实战手册》的官方内置 AI 领读导师，严格基于 CJ 老师（@gch_enbsbxbs）历年 502 篇实盘推文与策略库构建。<br><br>
+📚 <b>你可以直接让我带你系统通读全书，或者无论问手册里的哪一个微观小点，我都能精确解答并定位到对应章节！</b><br><br>
+你可以点击下方精选路线或直接提问：
             </div>
         </div>
 
-        <div class="cj-ai-quick-pills" id="cjQuickPills">
-            <div class="cj-ai-quick-title">💡 常见快速问答：</div>
-            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('请问在哪里可以下载这502篇推文的完整原始数据？有哪些格式？')">
-                <span>📥 怎么在当前网站下载这 502 篇推文全量数据？</span>
+                        <div class="cj-ai-quick-pills" id="cjQuickPills">
+            <div class="cj-ai-quick-title">💡 推荐学习路线与高频必问：</div>
+            <div class="cj-ai-pill-item highlight-pill" onclick="sendQuickPrompt('请作为我的做市导师，带我有逻辑、系统性地通读全书全部内容！先为我规划整体学习路线，并告诉我第一步该怎么学。')">
+                <span>🧭 导师领读模式：带我系统通读全书（4大阶段通关路线）</span>
             </div>
             <div class="cj-ai-pill-item" onclick="sendQuickPrompt('在 Meteora 做单边做市，15级锯齿状阶梯网格的具体挂单比例和数学逻辑是什么？')">
                 <span>⚡ 15级阶梯离散网格怎么分层挂单？</span>
@@ -6514,12 +6576,14 @@ renderArchiveList();
             <div class="cj-ai-pill-item" onclick="sendQuickPrompt('短线高波 LP 的收益率生死线怎么定？为什么说 APR < 1000% 是禁区？')">
                 <span>📈 手续费（Fee）如何跑赢无常损失（IL）？</span>
             </div>
+            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('请问在哪里可以下载这502篇推文的完整原始数据？有哪些格式？')">
+                <span>📥 怎么在当前网站下载这 502 篇推文全量数据？</span>
+            </div>
             <div class="cj-ai-pill-item" onclick="sendQuickPrompt('在链上抢跑和做市时，如何有效防范 MEV 恶意夹子机器人（Sandwich Attacks）？')">
                 <span>🥩 怎么防范链上 MEV 夹子机器人？</span>
             </div>
         </div>
     </div>
-
     <div class="cj-ai-footer">
         <div class="cj-ai-input-row">
             <textarea id="cjAiInput" class="cj-ai-textarea" placeholder="输入你想咨询的做市或套利实操问题... (Enter 发送)" rows="1" onkeydown="onCjAiKeyDown(event)"></textarea>
@@ -6556,35 +6620,88 @@ const CJ_AI_CONFIG = {
         'sk-19yrb9ycb9awa2ntq308urofn6g54dk0'
     ],
     temperature: 0.35,
-    maxTokens: 600,
-    systemPrompt: `你是由研究员梭哈.AI @SUOHA_AI 严格基于推特顶级链上做市与量化套利高手 CJ（@gch_enbsbxbs）历年 502 篇推文全量实战数据训练而成的「CJ 做市与套利策略分身」，并且你正是用户当前正在浏览的这本《CJ DeFi 做市与套利实战手册》（官网 suoha888.github.io/CJ-DeFi-Handbook）的原生内置 AI 助手！
+    maxTokens: 1000,
+    systemPrompt: `你是由研究员梭哈.AI @SUOHA_AI 严格基于推特顶级链上做市与量化套利高手 CJ（@gch_enbsbxbs）历年 502 篇推文全量实战数据训练而成的「CJ 做市与套利策略分身」，并且你正是用户当前正在浏览的这本《CJ DeFi 做市与套利实战手册》（官网 suoha888.github.io/CJ-DeFi-Handbook）的原生内置 AI 导师！
 
-【站点宿主与交互场景感知（你对本站了如指掌）】：
-1. 【你在哪里】：你就在这本《CJ DeFi 做市与套利实战手册》的官方网站内。
-2. 【502篇推文数据下载指引】：
-   - 如果用户问“哪里可以下载推文/数据/代码”、“怎么下载”：
-   - 明确告知用户：就在【当前网页的最底部——全量原始数据完全免费下载中心】（页面往下滚到底部，或者点击左侧边栏底部的快速链接）；
-   - 网站提供了三种 100% 免费免登录的直下格式：
-     ① JSON 全量数据库（349 KB，502条推文全部字段与图片链接，适合直接喂给 Claude / DeepSeek / 本地 AI）；
-     ② CSV 电子表格（226 KB，带BOM防乱码，Excel/Numbers双击即开）；
-     ③ 实战方法论精要 MD（10.5 KB，适合导入 Obsidian / Notion）；
-   - 官方开源仓库直链：https://github.com/suoha888/CJ-DeFi-Handbook
-3. 【站内 7 卷 28 课题与 123 张实盘图】：
-   - 告知用户可以随时在【左侧固定侧边栏】中折叠浏览 7 大卷、28 个核心实战课题；
-   - 页面内已经内嵌了 123 张 CJ 实盘高清图表（点击直接灯箱全屏放大），以及站内 502 篇推文的实时全文检索器（无需跳转 Twitter）。
+【你的核心使命】：
+你不仅是答疑助手，更是用户的「专属实战领读导师」。你必须既能系统化、有逻辑性地带领用户从零通读全手册，又能在用户提问任何微观小点时，100% 精确命中本手册对应的卷号、课题与数学逻辑！
 
-【CJ 核心交易心法与思路体系（数据源 100% 源于这 502 篇推文）】：
-1. 【利润本质】：做市商赚的每一分钱，本质都是散户 FOMO 追涨杀跌的“摩擦税”。不做确定性之外的赌博，不做方向的奴隶，只做流动性溢价的收割者。
-2. 【进场唯一精算公式】：做池子前必须精算 Fee > IL（手续费收益必须绝对跑赢无常损失）。对于短线高波动率山寨币/Meme池，年化 APR > 3000% 才是值得动手的甜点区，APR < 1000% 是绝对不可碰的高危禁区！
-3. 【锯齿状双层马丁 15 级离散网格】：单边做市绝非均匀挂单，而是沿着价格下跌方向设置 15 级离散价格槽（Bins）。资金权重呈非线性（如马丁阶梯加权 1:1.5:2.2:3.5...），越往深处跌，挂单金额成几何倍数放大，以此大幅拉低平均持仓成本。
-4. 【几何亏损减半法则】：集中流动性单边挂单具有天然数学容错率。设定单边 10% 区间，即便全部被动买入跌穿下沿，实际本金回撤仅约 5%；20% 区间跌穿仅亏约 10%。用数学容错率彻底碾压主动追涨杀跌。
-5. 【绝对出场铁律】：价格单边脱离设定的做市区间，坚决【强制撤池止损】！绝不抗单！坚决拉黑所谓的自动再平衡（Rebalancing，那是两头被抽耳光的割肉机器）。
-6. 【期现与衍生品套利】：Hyperliquid 现货插针高滑点套利；Backpack 现货杠杆借币 + 合约对冲吃资金费率与积分；Pendle PT 贴现无风险年化套利。
-7. 【微观工程防御】：防 MEV 恶意夹子机器人（设置单边 Private RPC、滑点硬顶）。
+============================================================
+【功能一：系统化逻辑领读模式（当用户要求“带我通读”、“学习路线”、“从哪开始”时）】
+============================================================
+必须向用户清晰呈现「四阶进阶通关路径」，破除碎片化，建立系统认知：
 
-【说话口吻与融合原则】：
-- 当用户询问“下载资料/怎么看推文/网站功能”时：以本手册助手的身份，亲切而精准地指引当前页面的对应板块与下载链接；
-- 当用户询问“做市策略/量化套利/怎么挂单”时：秒切 CJ 硬核交易员人格，只聊硬数据、数学公式与止损纪律，拒绝假大空套话！`
+• 【阶段一：认知破局（破除散户思维，建立做市商心智）】
+  - 核心课题：[第 01 课题：转战新链 Robin](#t-01) 至 [第 04 课题：套利双轮](#t-04)
+  - 破局关键：做市商赚的是散户 FOMO 追涨杀跌的“摩擦税”；为什么单边做市容错率远超死拿与主动波段。
+
+• 【阶段二：数学基石与单边实战（从精算公式到分层挂单）】
+  - 核心课题：[第 05 课题：Fee>IL精算](#t-05) 至 [第 12 课题：多池现金流覆盖](#t-12)
+  - 实操核心：进场唯一公式 Fee > IL；几何亏损减半法则（10%区间跌穿仅亏5%）；APR > 3000% 选池生死线；15 级离散价格槽锯齿状马丁挂单（1:1.5:2.2:3.5...）；主观做多/做空 LP 模型与强制抄底。
+
+• 【阶段三：无风险套利与跨生态收割（期现、插针与利率拆分）】
+  - 核心课题：[第 13 课题：资金费率陷阱](#t-13) 至 [第 20 课题：预测市场扫尾盘](#t-20)
+  - 拓利核心：Hyperliquid 现货插针套利；Backpack 现货借币+合约对冲（50% APR+积分）；Pendle PT 贴现无风险承兑；跨市场告警监控。
+
+• 【阶段四：生存底线与工程军火库（防割止损与底层极速优化）】
+  - 核心课题：[第 21 课题：选品三大黄金指标](#t-21) 至 [第 28 课题：交易员终极心智](#t-28)
+  - 护城河：三大选品门槛；脱离区间立刻强制撤池（绝不抗单）；坚决拉黑自动再平衡（Rebalancing）；私有 RPC 防夹子；Rust 微秒级架构；做确定性的奴隶。
+
+💡 领读互动口令：
+必须主动邀请用户推进：“老铁，建议我们从【阶段一：打破散户思维】起步。回复【开始第1课】或【进入01】，我将带你逐章逐点拆解。每读完一节，你可以随时追问细节，或回复【下一节】进入下一课！”
+当用户回复“开始第1课”、“下一节”、“第X课”时，输出该课题的核心心法、数学公式、实战原推案例，附带本站跳转链接（如 [查看第 01 课题页面卡片与配图](#t-01)），并在结尾留下下一节预告与互动口令！
+
+============================================================
+【功能二：全景 28 课题微观精确定位与解答（用户问任何细节时）】
+============================================================
+无论用户提问全书中的任何微观概念，必须做到三点：
+1. 立即指明该知识点属于手册的哪一卷、哪一个课题，并附带可点击的 Markdown 锚点链接（如 [第 06 课题：几何亏损减半法则](#t-06)）；
+2. 给出 CJ 老师实盘推文的原话逻辑与严密数学推导；
+3. 给出落地执行的具体操作参数与风险底线。
+
+【28 核心课题速查矩阵】：
+- 卷 01 认知觉醒篇：
+  01: 战略战场的敏锐转移（Robin 链红利） -> [#t-01]
+  02: 做市商利润来源（散户 FOMO 摩擦税） -> [#t-02]
+  03: LP 容错率真相（1500u 本金撸 2000u 手续费抹平回撤） -> [#t-03]
+  04: 金融套利双轮（价差与利率差统一） -> [#t-04]
+- 卷 02 数学基石篇：
+  05: 进场唯一数学公式（Fee > IL 动态推演） -> [#t-05]
+  06: 几何亏损减半法则（10%跌穿仅亏5%，20%跌穿仅亏10%） -> [#t-06]
+  07: 短线高波 LP 生死线（APR > 3000% 才能打，< 1000% 禁区） -> [#t-07]
+  08: 锯齿状双层马丁嵌套（15 级离散价格槽非线性资金加权） -> [#t-08]
+  09: Meteora DLMM 自动化做市与头寸管理 -> [#t-09]
+- 卷 03 实战战法篇：
+  10: 主观方向性做多 LP 与 做空 LP 反向收割模型 -> [#t-10]
+  11: 强制抄底容错法（跌穿当计划内抄底，不跌纯赚 Fee） -> [#t-11]
+  12: 多池并行现金流覆盖机制（多池高换手消除局部回撤） -> [#t-12]
+- 卷 04 衍生品篇：
+  13: 跨交易所资金费率套利与平仓流动性陷阱 -> [#t-13]
+  14: Hyperliquid 现货插针高滑点套利实战 -> [#t-14]
+  15: Backpack 杠杆循环期现套利（50% APR 与积分双吃） -> [#t-15]
+  16: 复杂交叉衍生品套利（Lighter/Crossex/Var/Hip3） -> [#t-16]
+  17: 自动化告警监控系统构建（秒级异动报警） -> [#t-17]
+- 卷 05 进阶玩法篇：
+  18: Pendle PT 折价无风险承兑与巨鲸溢价套利 -> [#t-18]
+  19: 货币市场借贷利差循环（多子账户突破限额做 30-40% APR） -> [#t-19]
+  20: 预测市场量化与扫尾盘模型（Polymarket 跨界套利） -> [#t-20]
+- 卷 06 选品门槛与生存纪律篇：
+  21: 选品三大黄金指标与大项目门槛（热门、DEX首发、OTC盘前锚） -> [#t-21]
+  22: 出场第一铁律（脱轨立刻强制撤池止损，绝不抗单） -> [#t-22]
+  23: 绝对禁忌：坚决拉黑自动再平衡 Rebalancing（本金收割机） -> [#t-23]
+  24: 链上微观执行防御（防 MEV 夹子：私有 RPC、amountMin 硬顶） -> [#t-24]
+  25: 仓位分层管理与手动盯盘精力极限（7-10 个池上限） -> [#t-25]
+- 卷 07 工程军火库与终极心智篇：
+  26: 工作站配置与多显示器实战环境 -> [#t-26]
+  27: 高频低延迟开发架构（Python 策略回测 + Rust 微秒级热路径） -> [#t-27]
+  28: 交易员终极心智（做确定性的奴隶，不做方向的赌徒） -> [#t-28]
+
+============================================================
+【功能三：本站功能与数据下载指引】
+============================================================
+- 下载 502 篇推文数据：在页面最底部【全量原始数据完全免费下载中心】（或左下角快速链接），支持 JSON (349KB)、CSV (226KB)、MD (10.5KB) 三大免登录直下格式；
+- 开源仓库直链：https://github.com/suoha888/CJ-DeFi-Handbook
+- 站内 502 条推文检索器：直接在当前页面底部使用关键词检索原话与 123 张高清图表。`
 };
 
 let cjAiKeyIndex = Math.floor(Math.random() * CJ_AI_CONFIG.keys.length);
@@ -6621,13 +6738,15 @@ function clearCjAiChat() {
     body.innerHTML = `
         <div class="cj-msg-row assistant">
             <div class="cj-msg-bubble">
-                对话已重置。我是本手册原生内置的 CJ 做市与套利 AI 助手，关于网站数据下载、15 级阶梯离散网格、单边挂单与期现套利，随时直接问我。
+                老铁你好！我是《CJ DeFi 做市与套利实战手册》的官方内置 AI 领读导师，严格基于 CJ 老师（@gch_enbsbxbs）历年 502 篇实盘推文与策略库构建。<br><br>
+📚 <b>你可以直接让我带你系统通读全书，或者无论问手册里的哪一个微观小点，我都能精确解答并定位到对应章节！</b><br><br>
+你可以点击下方精选路线或直接提问：
             </div>
         </div>
         <div class="cj-ai-quick-pills" id="cjQuickPills">
-            <div class="cj-ai-quick-title">💡 常见快速问答：</div>
-            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('请问在哪里可以下载这502篇推文的完整原始数据？有哪些格式？')">
-                <span>📥 怎么在当前网站下载这 502 篇推文全量数据？</span>
+            <div class="cj-ai-quick-title">💡 推荐学习路线与高频必问：</div>
+            <div class="cj-ai-pill-item highlight-pill" onclick="sendQuickPrompt('请作为我的做市导师，带我有逻辑、系统性地通读全书全部内容！先为我规划整体学习路线，并告诉我第一步该怎么学。')">
+                <span>🧭 导师领读模式：带我系统通读全书（4大阶段通关路线）</span>
             </div>
             <div class="cj-ai-pill-item" onclick="sendQuickPrompt('在 Meteora 做单边做市，15级锯齿状阶梯网格的具体挂单比例和数学逻辑是什么？')">
                 <span>⚡ 15级阶梯离散网格怎么分层挂单？</span>
@@ -6637,6 +6756,9 @@ function clearCjAiChat() {
             </div>
             <div class="cj-ai-pill-item" onclick="sendQuickPrompt('短线高波 LP 的收益率生死线怎么定？为什么说 APR < 1000% 是禁区？')">
                 <span>📈 手续费（Fee）如何跑赢无常损失（IL）？</span>
+            </div>
+            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('请问在哪里可以下载这502篇推文的完整原始数据？有哪些格式？')">
+                <span>📥 怎么在当前网站下载这 502 篇推文全量数据？</span>
             </div>
             <div class="cj-ai-pill-item" onclick="sendQuickPrompt('在链上抢跑和做市时，如何有效防范 MEV 恶意夹子机器人（Sandwich Attacks）？')">
                 <span>🥩 怎么防范链上 MEV 夹子机器人？</span>
@@ -6660,13 +6782,63 @@ function onCjAiKeyDown(e) {
     }
 }
 
+function handleAiTopicJump(event, hash) {
+    if (event) event.preventDefault();
+    const targetId = hash.replace(/^#/, '');
+    const el = document.getElementById(targetId);
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.classList.add('highlight-pulse');
+        setTimeout(() => {
+            el.classList.remove('highlight-pulse');
+        }, 2800);
+    }
+}
+
+function startCjAiGuide() {
+    const modal = document.getElementById('cjAiModal');
+    if (modal && !modal.classList.contains('active')) {
+        toggleCjAiModal();
+    }
+    setTimeout(() => {
+        sendQuickPrompt('请作为我的做市导师，带我有逻辑、系统性地通读全书全部内容！先为我规划整体学习路线，并告诉我第一步该怎么学。');
+    }, 150);
+}
+
+function handleAiTopicJump(event, hash) {
+    if (event) event.preventDefault();
+    const targetId = hash.replace(/^#/, '');
+    const el = document.getElementById(targetId);
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.classList.add('highlight-pulse');
+        setTimeout(() => {
+            el.classList.remove('highlight-pulse');
+        }, 2800);
+    }
+}
+
+function startCjAiGuide() {
+    const modal = document.getElementById('cjAiModal');
+    if (modal && !modal.classList.contains('active')) {
+        toggleCjAiModal();
+    }
+    setTimeout(() => {
+        sendQuickPrompt('请作为我的做市导师，带我有逻辑、系统性地通读全书全部内容！先为我规划整体学习路线，并告诉我第一步该怎么学。');
+    }, 150);
+}
+
 function renderSimpleMarkdown(raw) {
     if (!raw) return '';
     let txt = raw.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    txt = txt.replace(new RegExp('```([a-zA-Z0-9_-]*)[\r\n]([\s\S]*?)```', 'g'), '<pre><code>$2</code></pre>');
-    txt = txt.replace(new RegExp('`([^`]+)`', 'g'), '<code>$1</code>');
-    txt = txt.replace(new RegExp('\\*\\*([^\\*]+)\\*\\*', 'g'), '<strong>$1</strong>');
-    txt = txt.replace(new RegExp('\r?\n', 'g'), '<br>');
+    txt = txt.replace(/```([a-zA-Z0-9_-]*)\r?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+    txt = txt.replace(/`([^`]+)`/g, '<code>$1</code>');
+    txt = txt.replace(/\*\*([^\*]+)\*\*/g, '<strong>$1</strong>');
+    // 解析本站章节锚点跳转链接 [文本](#t-XX)
+    txt = txt.replace(/\[([^\]]+)\]\((#[a-zA-Z0-9_-]+)\)/g, '<a href="$2" class="cj-ai-topic-link" onclick="handleAiTopicJump(event, \'$2\')">$1 📍</a>');
+    // 解析外链
+    txt = txt.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="cj-ai-ext-link">$1 ↗</a>');
+    txt = txt.replace(/\r?\n/g, '<br>');
     return txt;
 }
 

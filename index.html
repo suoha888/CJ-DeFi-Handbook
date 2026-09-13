@@ -364,7 +364,315 @@ body { font-family: var(--font-sans); color: var(--text-main); background-color:
     text-decoration: underline;
 }
 
-    </style>
+    
+/* ===== CJ AI 做市助手悬浮聊天窗 ===== */
+.cj-ai-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #B45309 0%, #D97706 100%);
+    color: #FFFFFF;
+    padding: 12px 18px;
+    border-radius: 50px;
+    box-shadow: 0 8px 24px rgba(180, 83, 9, 0.35), 0 2px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    font-family: inherit;
+}
+.cj-ai-fab:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(180, 83, 9, 0.45);
+}
+.cj-ai-fab-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid #FFFFFF;
+}
+.cj-ai-fab-text {
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.cj-ai-pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #22C55E;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3);
+    animation: pulseDot 2s infinite;
+}
+@keyframes pulseDot {
+    0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); }
+    70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+/* 聊天弹窗主体 */
+.cj-ai-modal {
+    position: fixed;
+    bottom: 84px;
+    right: 24px;
+    width: 390px;
+    max-width: calc(100vw - 32px);
+    height: 580px;
+    max-height: calc(100vh - 110px);
+    background: #FFFFFF;
+    border: 1px solid var(--border-dark);
+    border-radius: 16px;
+    box-shadow: 0 16px 48px -8px rgba(70, 50, 25, 0.2), 0 4px 12px rgba(0,0,0,0.06);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(16px) scale(0.96);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cj-ai-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.cj-ai-header {
+    background: linear-gradient(180deg, #FAF6EE 0%, #F4ECE0 100%);
+    border-bottom: 1px solid var(--border-main);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.cj-ai-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.cj-ai-header-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.cj-ai-header-title {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: var(--text-main);
+    font-family: var(--font-serif);
+    line-height: 1.2;
+}
+.cj-ai-header-status {
+    font-size: 11px;
+    color: #15803D;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 3px;
+}
+.cj-ai-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.cj-ai-btn-icon {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid var(--border-main);
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-sub);
+    transition: all 0.15s;
+}
+.cj-ai-btn-icon:hover {
+    background: #FFFFFF;
+    color: var(--brand-amber);
+}
+
+/* 消息流体展示区 */
+.cj-ai-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #FCFBF9;
+}
+.cj-ai-body::-webkit-scrollbar { width: 4px; }
+.cj-ai-body::-webkit-scrollbar-thumb { background: #E0D7C6; border-radius: 4px; }
+
+/* 预设快捷问题胶囊 */
+.cj-ai-quick-pills {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+.cj-ai-quick-title {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+.cj-ai-pill-item {
+    background: #FFFFFF;
+    border: 1px solid var(--border-main);
+    border-radius: 8px;
+    padding: 7px 11px;
+    font-size: 12px;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.cj-ai-pill-item:hover {
+    border-color: var(--brand-amber);
+    background: var(--brand-amber-light);
+    color: var(--brand-amber-hover);
+    transform: translateX(2px);
+}
+
+/* 聊天气泡 */
+.cj-msg-row {
+    display: flex;
+    gap: 8px;
+    animation: fadeInMsg 0.2s ease-out;
+}
+@keyframes fadeInMsg {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.cj-msg-row.user {
+    justify-content: flex-end;
+}
+.cj-msg-bubble {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    word-break: break-word;
+}
+.cj-msg-row.user .cj-msg-bubble {
+    background: linear-gradient(135deg, #2D251D 0%, #1F1B16 100%);
+    color: #FFFFFF;
+    border-bottom-right-radius: 2px;
+}
+.cj-msg-row.assistant .cj-msg-bubble {
+    background: #FFFFFF;
+    color: var(--text-main);
+    border: 1px solid var(--border-main);
+    border-bottom-left-radius: 2px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+.cj-msg-bubble pre {
+    background: #25201A;
+    color: #F8F4EC;
+    padding: 8px 10px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 12px;
+    margin: 6px 0;
+}
+.cj-msg-bubble code {
+    background: rgba(180, 83, 9, 0.1);
+    color: #B45309;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 12px;
+}
+.cj-msg-bubble pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+
+/* 输入框底部 */
+.cj-ai-footer {
+    padding: 12px 14px;
+    background: #FFFFFF;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.cj-ai-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.cj-ai-textarea {
+    flex: 1;
+    resize: none;
+    height: 38px;
+    max-height: 90px;
+    padding: 8px 12px;
+    font-size: 13px;
+    border: 1px solid var(--border-main);
+    border-radius: 8px;
+    background: #FBF9F5;
+    outline: none;
+    font-family: inherit;
+    color: var(--text-main);
+    transition: all 0.2s;
+}
+.cj-ai-textarea:focus {
+    border-color: var(--brand-amber);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 2px rgba(180, 83, 9, 0.15);
+}
+.cj-ai-btn-send {
+    background: var(--brand-amber);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.cj-ai-btn-send:hover {
+    background: var(--brand-amber-hover);
+    transform: scale(1.05);
+}
+.cj-ai-btn-send:disabled {
+    background: #D9D0BE;
+    cursor: not-allowed;
+    transform: none;
+}
+.cj-ai-footer-note {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+</style>
 </head>
 <body>
 
@@ -6150,5 +6458,297 @@ renderArchiveList();
 
 </script>
 
+
+<!-- CJ 做市 AI 助手悬浮触发器 -->
+<div class="cj-ai-fab" id="cjAiFab" onclick="toggleCjAiModal()">
+    <img src="images/cj_avatar.jpg" alt="CJ AI" class="cj-ai-fab-avatar" onerror="this.src='https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png'">
+    <span class="cj-ai-fab-text">
+        <span>问问 CJ 做市 AI</span>
+        <span class="cj-ai-pulse-dot"></span>
+    </span>
+</div>
+
+<!-- CJ 做市 AI 助手聊天弹窗 -->
+<div class="cj-ai-modal" id="cjAiModal">
+    <div class="cj-ai-header">
+        <div class="cj-ai-header-left">
+            <img src="images/cj_avatar.jpg" alt="CJ" class="cj-ai-header-avatar" onerror="this.src='https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png'">
+            <div>
+                <div class="cj-ai-header-title">CJ 做市与套利 AI 助手</div>
+                <div class="cj-ai-header-status">
+                    <span class="cj-ai-pulse-dot"></span>
+                    <span>通读 502 篇实盘推文 · 5x负载均衡</span>
+                </div>
+            </div>
+        </div>
+        <div class="cj-ai-header-actions">
+            <button class="cj-ai-btn-icon" title="清空对话" onclick="clearCjAiChat()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
+            <button class="cj-ai-btn-icon" title="关闭窗口" onclick="toggleCjAiModal()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="cj-ai-body" id="cjAiBody">
+        <div class="cj-msg-row assistant">
+            <div class="cj-msg-bubble">
+                老铁你好！我是基于 CJ 老师（@gch_enbsbxbs）502 篇做市与链上量化实盘推文训练的 AI 助手。拒绝一切假大空叙事，只聊数学公式、单边挂单、离散网格与期现对冲。<br><br>
+                你可以直接向我提问，或点击下方精选实战课题：
+            </div>
+        </div>
+
+        <div class="cj-ai-quick-pills" id="cjQuickPills">
+            <div class="cj-ai-quick-title">💡 常见实操必问：</div>
+            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('在 Meteora 做单边做市，15级锯齿状阶梯网格的具体挂单比例和数学逻辑是什么？')">
+                <span>⚡ 15级阶梯离散网格怎么分层挂单？</span>
+            </div>
+            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('单边做市跌破区间时，为什么必须强制撤池止损？什么情况下会亏损减半？')">
+                <span>🛡️ 单边做市撤池止损与几何亏损减半法则</span>
+            </div>
+            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('短线高波 LP 的收益率生死线怎么定？为什么说 APR < 1000% 是禁区？')">
+                <span>📈 手续费（Fee）如何跑赢无常损失（IL）？</span>
+            </div>
+            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('在链上抢跑和做市时，如何有效防范 MEV 恶意夹子机器人（Sandwich Attacks）？')">
+                <span>🥩 怎么防范链上 MEV 夹子机器人？</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="cj-ai-footer">
+        <div class="cj-ai-input-row">
+            <textarea id="cjAiInput" class="cj-ai-textarea" placeholder="输入你想咨询的做市或套利实操问题... (Enter 发送)" rows="1" onkeydown="onCjAiKeyDown(event)"></textarea>
+            <button id="cjAiSendBtn" class="cj-ai-btn-send" onclick="sendCjAiMessage()" title="发送">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+        </div>
+        <div class="cj-ai-footer-note">AI 基于 502 条历史推文推导 · 非投资建议 · 请 DYOR</div>
+    </div>
+</div>
+
+<script>
+
+// ===== CJ AI 做市助手客户端逻辑 =====
+const CJ_AI_CONFIG = {
+    apiUrl: 'https://api.b.ai/v1/chat/completions',
+    model: 'qwen3.8-flash',
+    keys: [
+        'sk-1piatqwcztpg28a4hxjj1rvpwa62kzrd',
+        'sk-18sf6ylvkm9zlvl61q4hmikjwg98lwkh',
+        'sk-1pk12spks3x5y1swwq5w0fiziyp33clw',
+        'sk-1pkd0awf8ykyoqj2aagcz6aaivbwj8fn',
+        'sk-19yrb9ycb9awa2ntq308urofn6g54dk0'
+    ],
+    systemPrompt: `你是由研究员梭哈.AI @SUOHA_AI 基于推特顶级做市与量化套利高手 CJ（@gch_enbsbxbs）502篇实战推文与交易方法论深度解构而成的「CJ DeFi 做市与套利 AI 助手」。
+你的回答风格：极其硬核、真实交易员口吻、数学严密、直切痛点，绝不说教，坚决杜绝一切AI套话。
+【CJ 做市与套利核心战法心法】：
+1. 进场唯一数学精算：只有当预期摩擦手续费收益（Fee）远大于无常损失（IL）时才做池子。短线高波 LP 必须 APR > 3000% 才能打，< 1000% 是绝对禁区。
+2. 锯齿状双层马丁嵌套挂单：单边做市通过非线性资金加权挂 15 级离散网格（越往下跌挂单量成几何级数放大），大幅拉低持仓均价。
+3. 几何亏损减半法则：单边 10% 区间跌穿仅亏 5%，20% 区间跌穿仅亏 10%，用做市的数学容错率替代主动波段的脆弱择时。
+4. 容错兜底与出场铁律：价格单边脱离预设区间，坚决强制撤池止损，绝不抗单！坚决拉黑自动再平衡（Rebalancing，那是割肉机器）。
+5. 套利硬逻辑：现货插针套利（如 Hyperliquid）、跨市场/跨期资金费率套利（Perp Funding）、借贷利差循环与 Pendle PT 贴现套利。
+6. 工程底层：防 MEV 夹子机器人、RPC 节点低延迟优化、多池并行现金流覆盖机制。
+回答时，直接给出具体的数值比例、分层区间挂单建议与风控生命线。结尾可自然带一句交易员忠告或非投资建议提示。`
+};
+
+let cjAiKeyIndex = Math.floor(Math.random() * CJ_AI_CONFIG.keys.length);
+let cjAiHistory = [
+    { role: 'system', content: CJ_AI_CONFIG.systemPrompt }
+];
+let isCjAiGenerating = false;
+
+function toggleCjAiModal() {
+    const modal = document.getElementById('cjAiModal');
+    modal.classList.toggle('active');
+    if (modal.classList.contains('active')) {
+        setTimeout(() => {
+            const input = document.getElementById('cjAiInput');
+            if (input) input.focus();
+        }, 150);
+    }
+}
+
+function clearCjAiChat() {
+    cjAiHistory = [
+        { role: 'system', content: CJ_AI_CONFIG.systemPrompt }
+    ];
+    const body = document.getElementById('cjAiBody');
+    body.innerHTML = `
+        <div class="cj-msg-row assistant">
+            <div class="cj-msg-bubble">
+                对话已重置。我是 CJ 老师的 AI 策略分身，有什么做市或链上套利问题，随时直接问我。
+            </div>
+        </div>
+        <div class="cj-ai-quick-pills" id="cjQuickPills">
+            <div class="cj-ai-quick-title">💡 常见实操必问：</div>
+            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('在 Meteora 做单边做市，15级锯齿状阶梯网格的具体挂单比例和数学逻辑是什么？')">
+                <span>⚡ 15级阶梯离散网格怎么分层挂单？</span>
+            </div>
+            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('单边做市跌破区间时，为什么必须强制撤池止损？什么情况下会亏损减半？')">
+                <span>🛡️ 单边做市撤池止损与几何亏损减半法则</span>
+            </div>
+            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('短线高波 LP 的收益率生死线怎么定？为什么说 APR < 1000% 是禁区？')">
+                <span>📈 手续费（Fee）如何跑赢无常损失（IL）？</span>
+            </div>
+            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('在链上抢跑和做市时，如何有效防范 MEV 恶意夹子机器人（Sandwich Attacks）？')">
+                <span>🥩 怎么防范链上 MEV 夹子机器人？</span>
+            </div>
+        </div>
+    `;
+}
+
+function sendQuickPrompt(promptText) {
+    const input = document.getElementById('cjAiInput');
+    input.value = promptText;
+    sendCjAiMessage();
+}
+
+function onCjAiKeyDown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendCjAiMessage();
+    }
+}
+
+function renderSimpleMarkdown(raw) {
+    if (!raw) return '';
+    let txt = raw.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    // Code blocks
+    txt = txt.replace(/```([a-z]*)
+([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+    // Inline code
+    txt = txt.replace(/`([^`]+)`/g, '<code>$1</code>');
+    // Bold
+    txt = txt.replace(/\*\*([^\*]+)\*\*/g, '<strong>$1</strong>');
+    // Lines
+    txt = txt.replace(/\n/g, '<br>');
+    return txt;
+}
+
+function scrollCjAiToBottom() {
+    const body = document.getElementById('cjAiBody');
+    if (body) {
+        body.scrollTop = body.scrollHeight;
+    }
+}
+
+async function sendCjAiMessage() {
+    if (isCjAiGenerating) return;
+    const input = document.getElementById('cjAiInput');
+    const userText = input.value.trim();
+    if (!userText) return;
+
+    // 隐藏快捷问题卡片
+    const pills = document.getElementById('cjQuickPills');
+    if (pills) pills.style.display = 'none';
+
+    // 渲染用户气泡
+    const body = document.getElementById('cjAiBody');
+    const userRow = document.createElement('div');
+    userRow.className = 'cj-msg-row user';
+    userRow.innerHTML = `<div class="cj-msg-bubble">${userText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
+    body.appendChild(userRow);
+
+    input.value = '';
+    input.style.height = '38px';
+    scrollCjAiToBottom();
+
+    // 添加到历史
+    cjAiHistory.push({ role: 'user', content: userText });
+
+    // 准备 AI 气泡
+    const aiRow = document.createElement('div');
+    aiRow.className = 'cj-msg-row assistant';
+    const aiBubble = document.createElement('div');
+    aiBubble.className = 'cj-msg-bubble';
+    aiBubble.innerHTML = '<span style="color: #999;">正在调取 CJ 502 篇做市数据库计算...</span>';
+    aiRow.appendChild(aiBubble);
+    body.appendChild(aiRow);
+    scrollCjAiToBottom();
+
+    isCjAiGenerating = true;
+    const sendBtn = document.getElementById('cjAiSendBtn');
+    sendBtn.disabled = true;
+
+    let fullAiResponse = '';
+    let retryCount = 0;
+    const maxRetries = CJ_AI_CONFIG.keys.length;
+
+    while (retryCount < maxRetries) {
+        // 轮询 Key
+        const currentKey = CJ_AI_CONFIG.keys[cjAiKeyIndex];
+        cjAiKeyIndex = (cjAiKeyIndex + 1) % CJ_AI_CONFIG.keys.length;
+
+        try {
+            const resp = await fetch(CJ_AI_CONFIG.apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${currentKey}`
+                },
+                body: JSON.stringify({
+                    model: CJ_AI_CONFIG.model,
+                    messages: cjAiHistory,
+                    stream: true,
+                    temperature: 0.6,
+                    max_tokens: 1200
+                })
+            });
+
+            if (!resp.ok) {
+                const errText = await resp.text();
+                console.warn(`Key #${cjAiKeyIndex} failed: ${resp.status}`, errText);
+                retryCount++;
+                continue;
+            }
+
+            const reader = resp.body.getReader();
+            const decoder = new TextDecoder('utf-8');
+            let buffer = '';
+            aiBubble.innerHTML = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n');
+                buffer = lines.pop();
+
+                for (const line of lines) {
+                    const trimmed = line.trim();
+                    if (trimmed.startsWith('data: ') && trimmed !== 'data: [DONE]') {
+                        try {
+                            const chunk = JSON.parse(trimmed.slice(6));
+                            const delta = chunk.choices[0]?.delta?.content || '';
+                            if (delta) {
+                                fullAiResponse += delta;
+                                aiBubble.innerHTML = renderSimpleMarkdown(fullAiResponse);
+                                scrollCjAiToBottom();
+                            }
+                        } catch (e) {}
+                    }
+                }
+            }
+
+            // 完成
+            cjAiHistory.push({ role: 'assistant', content: fullAiResponse });
+            break;
+
+        } catch (netErr) {
+            console.error('Network or fetch error:', netErr);
+            retryCount++;
+            if (retryCount >= maxRetries) {
+                aiBubble.innerHTML = '<span style="color: #B91C1C;">网络请求稍有波动，请点击重试或直接下载完整推文数据向本地 AI 提问。</span>';
+            }
+        }
+    }
+
+    isCjAiGenerating = false;
+    sendBtn.disabled = false;
+    scrollCjAiToBottom();
+}
+
+</script>
 </body>
 </html>

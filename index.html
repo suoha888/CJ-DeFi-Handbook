@@ -6522,11 +6522,11 @@ renderArchiveList();
 
 
 <!-- CJ 做市 AI 助手悬浮触发器 -->
-<div class="cj-ai-fab" id="cjAiFab" onclick="toggleCjAiModal()">
+<div class="cj-ai-fab" id="cjAiFab" onclick="toggleCjAiModal()" style="background: linear-gradient(135deg, #92400E 0%, #B45309 100%);">
     <img src="images/cj_avatar.jpg" alt="CJ AI" class="cj-ai-fab-avatar" onerror="this.src='https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png'">
     <span class="cj-ai-fab-text">
-        <span>问问 CJ 做市 AI</span>
-        <span class="cj-ai-pulse-dot"></span>
+        <span>⚡ AI 助手算力维护中</span>
+        <span class="cj-ai-pulse-dot" style="background-color: #F59E0B; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.4);"></span>
     </span>
 </div>
 
@@ -6538,8 +6538,8 @@ renderArchiveList();
             <div>
                 <div class="cj-ai-header-title">CJ 做市与套利 AI 助手</div>
                 <div class="cj-ai-header-status">
-                    <span class="cj-ai-pulse-dot"></span>
-                    <span>通读 502 篇实盘推文 · 15x 智能负载均衡</span>
+                    <span class="cj-ai-pulse-dot" style="background-color: #F59E0B; width:6px; height:6px;"></span>
+                    <span style="color: #B45309; font-weight:700;">算力额度补充中 · 稍后重新开放</span>
                 </div>
             </div>
         </div>
@@ -6555,38 +6555,28 @@ renderArchiveList();
 
     <div class="cj-ai-body" id="cjAiBody">
         <div class="cj-msg-row assistant">
-            <div class="cj-msg-bubble">
-                老铁你好！我是《CJ DeFi 做市与套利实战手册》的原生内置 AI 助手。已全面通读 CJ 老师 502 篇实战推文与 28 个核心课题。<br><br>
-问什么答什么，只讲硬逻辑与执行动作。你可以直接提问，或点击下方快捷课题：
-            </div>
-        </div>
-
-                        <div class="cj-ai-quick-pills" id="cjQuickPills">
-            <div class="cj-ai-quick-title">💡 推荐学习路线与高频必问：</div>
-            <div class="cj-ai-pill-item highlight-pill" onclick="sendQuickPrompt('请作为我的做市导师，带我有逻辑、系统性地通读全书全部内容！先为我规划整体学习路线，并告诉我第一步该怎么学。')">
-                <span>🧭 导师领读模式：带我系统通读全书（4大阶段通关路线）</span>
-            </div>
-            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('在 Meteora 做单边做市，15级锯齿状阶梯网格的具体挂单比例和数学逻辑是什么？')">
-                <span>⚡ 15级阶梯离散网格怎么分层挂单？</span>
-            </div>
-            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('单边做市跌破区间时，为什么必须强制撤池止损？什么情况下会亏损减半？')">
-                <span>🛡️ 单边做市撤池止损与几何亏损减半法则</span>
-            </div>
-            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('短线高波 LP 的收益率生死线怎么定？为什么说 APR < 1000% 是禁区？')">
-                <span>📈 手续费（Fee）如何跑赢无常损失（IL）？</span>
-            </div>
-            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('请问在哪里可以下载这502篇推文的完整原始数据？有哪些格式？')">
-                <span>📥 怎么在当前网站下载这 502 篇推文全量数据？</span>
-            </div>
-            <div class="cj-ai-pill-item" onclick="sendQuickPrompt('在链上抢跑和做市时，如何有效防范 MEV 恶意夹子机器人（Sandwich Attacks）？')">
-                <span>🥩 怎么防范链上 MEV 夹子机器人？</span>
+            <div class="cj-msg-bubble" style="background: #FEF9ED; border: 1px solid #D8CDBC; border-left: 4px solid #B45309; padding: 18px 20px; line-height: 1.8; border-radius: 10px;">
+                <div style="font-weight: 800; font-size: 15px; color: #92400E; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                    <span>⚠️ AI 助手算力额度暂时耗尽公告</span>
+                </div>
+                <p style="color: #451A03; font-size: 13.5px; margin-bottom: 10px;">
+                    由于近几日全网广大交易员热情极高，推特访问提问量激增，当前部署的 15 组 API 节点额度已被全部提问耗尽！
+                </p>
+                <p style="color: #78350F; font-size: 13px; margin-bottom: 12px; background: rgba(255,255,255,0.75); padding: 8px 12px; border-radius: 6px; border: 1px solid #EAE2D2;">
+                    <strong>⚡ 恢复进度：</strong>主理人正在紧急充值采购全新算力 Key 池，预计稍后恢复开放，请大家稍微等待一下！
+                </p>
+                <div style="border-top: 1px dashed #D8CDBC; padding-top: 12px; font-size: 12.5px; color: #544D42; line-height: 1.7;">
+                    📖 <strong>在此期间不受任何影响：</strong><br>
+                    • 本手册全部 7 大卷 28 个核心实战课题与 502 篇推文手稿均可正常通读研习；<br>
+                    • 您也可以滑到页面最底部<strong>【全量原始数据下载中心】</strong>，直接免费免登录下载 JSON、CSV、Markdown 完整数据，喂给您本地的 AI 继续提问。感谢理解与支持！
+                </div>
             </div>
         </div>
     </div>
     <div class="cj-ai-footer">
         <div class="cj-ai-input-row">
-            <textarea id="cjAiInput" class="cj-ai-textarea" placeholder="输入你想咨询的做市或套利实操问题... (Enter 发送)" rows="1" onkeydown="onCjAiKeyDown(event)"></textarea>
-            <button id="cjAiSendBtn" class="cj-ai-btn-send" onclick="sendCjAiMessage()" title="发送">
+            <textarea id="cjAiInput" class="cj-ai-textarea" placeholder="⚡ 算力扩容维护中，稍后重新开放提问..." rows="1" disabled style="background:#F5F5F5; cursor:not-allowed; color:#887E6E;"></textarea>
+            <button id="cjAiSendBtn" class="cj-ai-btn-send" disabled style="background:#D1D5DB; cursor:not-allowed;" title="维护中">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
         </div>

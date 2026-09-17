@@ -6606,33 +6606,22 @@ const CJ_AI_CONFIG = {
     ],
     temperature: 0.2,
     maxTokens: 350,
-    systemPrompt: `你是推特顶尖链上做市与量化套利高手 CJ（@gch_enbsbxbs）的 AI 实战策略助手。基于 CJ 历年 502 篇实盘推文与《CJ DeFi 做市与套利实战手册》的知识体系构建。
+    systemPrompt: `你是推特顶尖链上做市与量化套利高手 CJ（@gch_enbsbxbs）的 AI 实战策略助手。基于 CJ 历年 502 篇实盘推文与手册 28 课题知识底座构建。
 
-【核心使命与回答原则】：
-1. 【来者不拒，正面必答】：
-   - 作为交易助手，无论用户问任何做市、套利、链上实操、土狗策略、行情理解或心态问题，都必须正面给出清晰解答，严禁拒绝回答，严禁回复空话；
-   - 即使用户问的问题在 502 篇推文或手册中没有直接对应的现成推文，也要基于 CJ 老师的核心交易哲学（算清无常与摩擦税、Fee > IL、马丁加权分层、脱轨立刻强制撤池、防夹子、做确定性的奴隶）进行专业严谨的推导与解答。
-2. 【智能导读，自然联动本站】：
-   - 如果用户问的问题在当前网站手册中有对应精讲课题（见下方 28 课题目录），在给出核心解答后，文末自然建议用户查阅对应章节卡片，格式：[第 XX 课题：课题名](#t-XX)；
-   - 如果用户问的是手册之外的泛化问题或日常实操，直接给出干脆利落的答案即可，不需要强行贴链接。
-3. 【极简短小，问什么答什么，避免 Token 拥挤】：
-   - 严禁任何开场寒暄废话（不说“老铁你好”、“很高兴为你解答”等），第一句直接给出核心答案；
-   - 篇幅严格控制在 150~250 字左右，短小精悍，直击要害；
-   - 严禁输出任何 # 符号（绝不输出 #、##、### 标题）；
-   - 严禁输出任何 LaTeX 符号（不写 $ 符号，公式直接写 Fee > IL、APR > 3000%）；
-   - 层次清晰，只用最简洁的段落或 1. 2. 序号。
+【核心心法与数学模型（信手拈来）】：
+1. 做市利润本质是散户 FOMO 摩擦税，把流动性当做主动交易武器，不赌方向做确定性的奴隶；
+2. 进场唯一公式：Fee > IL 动态推演，预期时间内手续费必须跑赢无常损失；短线高波 APR > 3000% 才是甜点区，< 1000% 坚决不碰；
+3. 锯齿状双层马丁：15 级离散价格槽加权挂单，越跌买得越多大幅拉低持仓均价；
+4. 几何亏损减半法则：单边做市跌穿区间时，静态回撤仅为区间跌幅的一半（10% 区间跌穿仅亏 5%）；
+5. 破位出场铁律：脱轨立刻强制撤池，绝不抗单，坚决拉黑自动再平衡（Rebalancing，那是割肉机）；
+6. 衍生品与对冲：Backpack 借币+合约对冲吃 50% APR 与积分，Hyperliquid 挂单吃插针异常滑点套利；
+7. 微观防御：防 MEV 夹子坚决走私有 RPC 节点，Swap 强制硬编码 amountMin 设置滑点硬顶。
 
-【手册 28 课题导航映射库（问到对应课题时推荐跳转）】：
-卷01 认知篇：01 转战Robin链红利(#t-01) | 02 利润源于散户FOMO摩擦税(#t-02) | 03 LP容错率真相(#t-03) | 04 金融套利双轮(#t-04)
-卷02 数学篇：05 Fee>IL进场唯一公式(#t-05) | 06 几何亏损减半法则(#t-06) | 07 APR>3000%生死线(#t-07) | 08 锯齿状双层马丁嵌套挂单(#t-08) | 09 Meteora DLMM自动化管理(#t-09)
-卷03 战法篇：10 主观做多/做空LP反向收割(#t-10) | 11 强制抄底容错法(#t-11) | 12 多池并行现金流覆盖(#t-12)
-卷04 衍生品：13 资金费率套利陷阱(#t-13) | 14 Hyperliquid现货插针套利(#t-14) | 15 Backpack借币合约对冲(#t-15) | 16 交叉衍生品套利(#t-16) | 17 自动化秒级监控报警(#t-17)
-卷05 进阶篇：18 Pendle PT折价承兑套利(#t-18) | 19 货币市场借贷利差循环(#t-19) | 20 Polymarket预测市场量化(#t-20)
-卷06 纪律篇：21 选品三大黄金指标(#t-21) | 22 出场第一铁律脱轨立刻撤池(#t-22) | 23 坚决拉黑自动再平衡(#t-23) | 24 私有RPC防MEV夹子(#t-24) | 25 手动盯盘极限7-10个池(#t-25)
-卷07 工程篇：26 量化工作站硬件配置(#t-26) | 27 Python告警+Rust微秒级热路径(#t-27) | 28 交易员终极心智(#t-28)
-
-【推文数据下载】：
-用户问哪里下载推文数据：页面底部【全量原始数据完全免费下载中心】可下载 JSON、CSV、MD，或访问 https://github.com/suoha888/CJ-DeFi-Handbook 。`
+【回答四大铁律】：
+1. 【正面必答】：第一句直接给出硬核结论，绝不说客套空话，哪怕推文没收录的问题也用 CJ 交易哲学推导回答；
+2. 【短小精悍】：字数控制在 150~220 字内，直击要害，绝不堆砌冗余；
+3. 【严禁乱码】：严禁输出任何 # 标题符号，严禁输出 LaTeX $ 符号，只用最普通的序号 1. 2. 或自然段落；
+4. 【智能章节联动】：若回答命中了手册章节，文末建议查阅对应卡片，格式：[第 XX 课题：课题名](#t-XX)。`
 };
 
 let cjAiKeyIndex = Math.floor(Math.random() * CJ_AI_CONFIG.keys.length);
@@ -6793,10 +6782,21 @@ async function sendCjAiMessage() {
     aiRow.className = 'cj-msg-row assistant';
     const aiBubble = document.createElement('div');
     aiBubble.className = 'cj-msg-bubble';
-    aiBubble.innerHTML = '<span style="color: #92400E; font-size:12px;">⚡ 正在调用 Atria-Dawn 深度推理中，请稍候...</span>';
+    
+    // 动态思考计时器
+    let thinkingSeconds = 0;
+    aiBubble.innerHTML = '<span style="color: #92400E; font-size:12.5px; display:inline-flex; align-items:center; gap:6px;"><span class="cj-ai-pulse-dot" style="background:#F59E0B; width:7px; height:7px;"></span> ⚡ 正在调用 Atria 深度模型演算中 (已思考 1s... 马上出字)</span>';
     aiRow.appendChild(aiBubble);
     body.appendChild(aiRow);
     scrollCjAiToBottom();
+
+    const thinkTimer = setInterval(() => {
+        thinkingSeconds++;
+        const tipEl = aiBubble.querySelector('span');
+        if (tipEl && !fullAiResponse) {
+            tipEl.innerHTML = `<span class="cj-ai-pulse-dot" style="background:#F59E0B; width:7px; height:7px;"></span> ⚡ 正在调用 Atria 深度模型演算中 (已思考 ${thinkingSeconds}s... 马上出字)`;
+        }
+    }, 1000);
 
     isCjAiGenerating = true;
     const sendBtn = document.getElementById('cjAiSendBtn');
@@ -6809,7 +6809,7 @@ async function sendCjAiMessage() {
     for (let attempt = 0; attempt < totalKeys; attempt++) {
         const currentKey = getNextKey();
         try {
-            console.log(`Sending query with Key #${cjAiKeyIndex} (${currentKey.slice(0, 8)})...`);
+            console.log(`Sending query to Atria (${currentKey.slice(0, 10)})...`);
             const resp = await fetch(CJ_AI_CONFIG.apiUrl, {
                 method: 'POST',
                 headers: {
@@ -6819,7 +6819,6 @@ async function sendCjAiMessage() {
                 body: JSON.stringify({
                     model: CJ_AI_CONFIG.model,
                     messages: cjAiHistory,
-                    enable_thinking: false,
                     stream: true,
                     temperature: CJ_AI_CONFIG.temperature,
                     max_tokens: CJ_AI_CONFIG.maxTokens
@@ -6829,7 +6828,6 @@ async function sendCjAiMessage() {
             if (!resp.ok) {
                 const errText = await resp.text();
                 console.warn(`Attempt ${attempt+1} failed with status ${resp.status}:`, errText);
-                aiBubble.innerHTML = `<span style="color: #92400E; font-size:12px;">⚡ 节点响应切换中 (${attempt+1}/${totalKeys})...</span>`;
                 continue;
             }
 
@@ -6850,9 +6848,10 @@ async function sendCjAiMessage() {
                     if (trimmed.startsWith('data: ') && trimmed !== 'data: [DONE]') {
                         try {
                             const chunk = JSON.parse(trimmed.slice(6));
-                            const delta = chunk.choices?.[0]?.delta?.content || chunk.choices?.[0]?.delta?.reasoning_content || '';
+                            const delta = chunk.choices?.[0]?.delta?.content || '';
                             if (delta) {
                                 if (isFirstChunk) {
+                                    clearInterval(thinkTimer);
                                     aiBubble.innerHTML = '';
                                     isFirstChunk = false;
                                 }
@@ -6860,6 +6859,33 @@ async function sendCjAiMessage() {
                                 aiBubble.innerHTML = renderSimpleMarkdown(fullAiResponse);
                                 scrollCjAiToBottom();
                             }
+                        } catch (e) {}
+                    }
+                }
+            }
+
+            if (fullAiResponse.trim()) {
+                clearInterval(thinkTimer);
+                aiBubble.innerHTML = renderSimpleMarkdown(fullAiResponse);
+                cjAiHistory.push({ role: 'assistant', content: fullAiResponse });
+                success = true;
+                break;
+            }
+
+        } catch (fetchErr) {
+            console.error(`Attempt ${attempt+1} network error:`, fetchErr);
+        }
+    }
+
+    clearInterval(thinkTimer);
+    if (!success) {
+        aiBubble.innerHTML = '<span style="color: #B91C1C;">⚠️ 请求超时或网络波动，请点击重试，或直接在页面底部下载完整推文数据向本地 AI 提问。</span>';
+    }
+
+    isCjAiGenerating = false;
+    if (sendBtn) sendBtn.disabled = false;
+    scrollCjAiToBottom();
+}
                         } catch (e) {}
                     }
                 }

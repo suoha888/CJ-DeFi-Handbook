@@ -6616,11 +6616,14 @@ const CJ_AI_CONFIG = {
 6. 衍生品与对冲：Backpack 借币+合约对冲吃 50% APR 与积分，Hyperliquid 挂单吃插针异常滑点套利；
 7. 微观防御：防 MEV 夹子坚决走私有 RPC 节点，Swap 强制硬编码 amountMin 设置滑点硬顶。
 
-【回答四大铁律（极速响应）】：
-1. 【开门见山】：第一句直接给出硬核结论或执行动作，无需长篇理论铺垫；
-2. 【短小精悍】：字数控制在 160~240 字内，直击要害，绝不堆砌冗余话术；
-3. 【严禁乱码】：严禁输出任何 # 标题符号，严禁输出 LaTeX $ 符号，只用序号 1. 2. 或自然段落；
-4. 【智能章节联动】：若回答命中了手册章节，文末建议查阅对应卡片，格式：[第 XX 课题：课题名](#t-XX)。`
+【最高死命令与回答铁律（违者重罚）】：
+1. 【绝对禁止复述提问】：严禁在回答开头复述、复读或拆解用户的问题！严禁出现“用户想要问...”、“你询问的是...”、“关于你提到的...”、“理解你的问题...”等任何复读废话！
+2. 【绝对禁止思维草稿】：严禁输出任何“思考：”、“分析：”、“问题解构：”等推理框架与草稿；
+3. 【绝对禁止寒暄客套】：严禁出现“你好”、“老铁你好”、“很高兴解答”等任何多余客套话；
+4. 【问什么直答什么】：我问什么，你第一行第一个字直接给出硬核答案与实操动作，不准有任何其他杂的内容！
+5. 【短小精悍】：字数控制在 160~240 字内，直击要害，绝不堆砌冗余；
+6. 【严禁乱码】：严禁输出任何 # 标题符号，严禁输出 LaTeX $ 符号，只用序号 1. 2. 或自然段落；
+7. 【智能章节联动】：若回答命中了手册章节，文末建议查阅对应卡片，格式：[第 XX 课题：课题名](#t-XX)。`
 };
 
 let cjAiKeyIndex = Math.floor(Math.random() * CJ_AI_CONFIG.keys.length);
@@ -6725,7 +6728,14 @@ function startCjAiGuide() {
 
 function renderSimpleMarkdown(raw) {
     if (!raw) return '';
-    let txt = raw.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    // 强制清洗前置废话与思维草稿（杜绝“用户想要问什么”等复述）
+    let txt = raw.replace(/^(?:\s*|\d+[\.、]\s*|\*+\s*)*(?:用户想要[问询了解]|用户意图|用户的?问题[是为：:]|你想要[问询了解]|你询问的[是为：:]|针对你的?提问|思考过程|问题解构|分析过程)[^\n]*(\n+|$)/gi, '');
+    txt = txt.replace(/^(?:\s*|\d+[\.、]\s*|\*+\s*)*(?:用户想要[问询了解]|用户意图|用户的?问题[是为：:]|你想要[问询了解]|你询问的[是为：:]|针对你的?提问|思考过程|问题解构|分析过程)[^\n]*(\n+|$)/gi, '');
+    txt = txt.replace(/^老铁(?:你好)?[，,！!\s]*/gi, '');
+    txt = txt.replace(/^你好[，,！!\s]*/gi, '');
+    txt = txt.replace(/^针对你(?:提到|所问)的?(?:问题|内容)[，,！!\s]*/gi, '');
+
+    txt = txt.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     // 代码块
     txt = txt.replace(/```([a-zA-Z0-9_-]*)\r?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
     txt = txt.replace(/`([^`]+)`/g, '<code>$1</code>');
@@ -6782,9 +6792,9 @@ async function sendCjAiMessage() {
     const aiBubble = document.createElement('div');
     aiBubble.className = 'cj-msg-bubble';
     
-    // 动态状态提示（去模型化，纯粹业务感）
+    // 动态状态提示（遵照要求：思考的时候说模型正在思考中）
     let searchDots = 0;
-    aiBubble.innerHTML = '<span style="color: #92400E; font-size:12.5px; display:inline-flex; align-items:center; gap:6px;"><span class="cj-ai-pulse-dot" style="background:#F59E0B; width:7px; height:7px;"></span> ⚡ 正在检索策略库与推文逻辑...</span>';
+    aiBubble.innerHTML = '<span style="color: #92400E; font-size:12.5px; display:inline-flex; align-items:center; gap:6px;"><span class="cj-ai-pulse-dot" style="background:#F59E0B; width:7px; height:7px;"></span> ⚡ 模型正在思考中...</span>';
     aiRow.appendChild(aiBubble);
     body.appendChild(aiRow);
     scrollCjAiToBottom();
@@ -6794,9 +6804,9 @@ async function sendCjAiMessage() {
         const dots = '.'.repeat(searchDots);
         const tipEl = aiBubble.querySelector('span');
         if (tipEl && !fullAiResponse) {
-            tipEl.innerHTML = `<span class="cj-ai-pulse-dot" style="background:#F59E0B; width:7px; height:7px;"></span> ⚡ 正在检索策略库与实盘逻辑${dots}`;
+            tipEl.innerHTML = `<span class="cj-ai-pulse-dot" style="background:#F59E0B; width:7px; height:7px;"></span> ⚡ 模型正在思考中${dots}`;
         }
-    }, 600);
+    }, 500);
 
     isCjAiGenerating = true;
     const sendBtn = document.getElementById('cjAiSendBtn');
@@ -6865,7 +6875,8 @@ async function sendCjAiMessage() {
             if (fullAiResponse.trim()) {
                 clearInterval(thinkTimer);
                 aiBubble.innerHTML = renderSimpleMarkdown(fullAiResponse);
-                cjAiHistory.push({ role: 'assistant', content: fullAiResponse });
+                const cleanedContent = fullAiResponse.replace(/^(?:\s*|\d+[\.、]\s*|\*+\s*)*(?:用户想要[问询了解]|用户意图|用户的?问题[是为：:]|你想要[问询了解]|你询问的[是为：:]|针对你的?提问|思考过程|问题解构|分析过程)[^\n]*(\n+|$)/gi, '').trim();
+                cjAiHistory.push({ role: 'assistant', content: cleanedContent || fullAiResponse });
                 success = true;
                 break;
             }
